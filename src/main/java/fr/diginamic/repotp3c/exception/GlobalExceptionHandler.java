@@ -1,5 +1,6 @@
 package fr.diginamic.repotp3c.exception;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -9,15 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler
 {
-    @ExceptionHandler(RuntimeException.class)
-    public String handleIllegalArgumentException(Exception e)
-    {
-        return "redirect:/view/register";
-    }
     
     @ExceptionHandler(ProblemException.class)
-    public String handleIllegalArgumentException(ProblemException e)
+    public ResponseEntity<String> handleIllegalArgumentException(ProblemException e)
     {
-        return "redirect:/view/register";
+        return ResponseEntity.internalServerError().body(e.getMessage());
     }
 }
