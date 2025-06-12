@@ -1,6 +1,7 @@
 package fr.diginamic.repotp3c.controller;
 
 import fr.diginamic.repotp3c.entity.UserApp;
+import fr.diginamic.repotp3c.exception.ProblemException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,7 @@ public interface IAuthController
      * @return message confirmation
      */
     @DeleteMapping({"/delete-admin-by-id"})
-    String deleteAdminById(@RequestParam Long id);
+    String deleteAdminById(@RequestParam Long id) throws ProblemException;
     
     /**
      * Permet de se connecter

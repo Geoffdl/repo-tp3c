@@ -2,6 +2,7 @@ package fr.diginamic.repotp3c.controller;
 
 import fr.diginamic.repotp3c.entity.Role;
 import fr.diginamic.repotp3c.entity.UserApp;
+import fr.diginamic.repotp3c.exception.ProblemException;
 import fr.diginamic.repotp3c.service.IUserAppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +42,7 @@ public class AuthController implements IAuthController
     
     @DeleteMapping({"/delete-admin-by-id"})
     @Override
-    public String deleteAdminById(@RequestParam Long id)
+    public String deleteAdminById(@RequestParam Long id) throws ProblemException
     {
         userAppService.deleteUserById(id);
         return "administrateur supprimé";
