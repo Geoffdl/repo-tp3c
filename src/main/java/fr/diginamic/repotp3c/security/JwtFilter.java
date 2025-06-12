@@ -1,7 +1,7 @@
 package fr.diginamic.repotp3c.security;
 
 import fr.diginamic.repotp3c.entity.UserApp;
-import fr.diginamic.repotp3c.service.JwtAuthentificationService;
+import fr.diginamic.repotp3c.service.IJwtAuthentificationService;
 import fr.diginamic.repotp3c.service.UserAppService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter
 {
     
     @Autowired
-    private JwtAuthentificationService jwtAuthentificationService;
+    private IJwtAuthentificationService IJwtAuthentificationService;
     
     @Value("${jwt.cookie}")
     private String TOKEN_COOKIE;
@@ -44,10 +44,10 @@ public class JwtFilter extends OncePerRequestFilter
             Stream.of(req.getCookies()).filter(cookie -> cookie.getName().equals(TOKEN_COOKIE)).map(Cookie::getValue)
                   .forEach(token ->
                            {
-                               if (jwtAuthentificationService.validateToken(token))
+                               if (IJwtAuthentificationService.validateToken(token))
                                {
                                    
-                                   String username = jwtAuthentificationService.getSubject(token);
+                                   String username = IJwtAuthentificationService.getSubject(token);
                                    
                                    try
                                    {

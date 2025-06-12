@@ -7,8 +7,8 @@ import fr.diginamic.repotp3c.entity.Candidature;
 import fr.diginamic.repotp3c.entity.Role;
 import fr.diginamic.repotp3c.entity.UserApp;
 import fr.diginamic.repotp3c.exception.ProblemException;
-import fr.diginamic.repotp3c.mapper.AnnonceMapper;
-import fr.diginamic.repotp3c.mapper.CandidatureMapper;
+import fr.diginamic.repotp3c.mapper.IAnnonceMapper;
+import fr.diginamic.repotp3c.mapper.ICandidatureMapper;
 import fr.diginamic.repotp3c.repository.AnnonceRepository;
 import fr.diginamic.repotp3c.repository.CandidatureRepository;
 import fr.diginamic.repotp3c.repository.UserAppRepository;
@@ -22,32 +22,34 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class AnnonceService
+public class AnnonceService implements IAnnonceService
 {
     @Autowired
-    CandidatureMapper candidatureMapper;
+    private ICandidatureMapper ICandidatureMapper;
     @Autowired
     private AnnonceRepository annonceRepository;
     @Autowired
-    private CandidatureService candidatureService;
+    private ICandidatureService candidatureService;
     @Autowired
-    private UserAppService userAppService;
+    private IUserAppService userAppService;
     @Autowired
     private HttpUtils httpUtils;
     @Autowired
     private UserAppRepository userAppRepository;
     @Autowired
-    private AnnonceMapper annonceMapper;
+    private IAnnonceMapper annonceMapper;
     @Autowired
     private CandidatureRepository candidatureRepository;
     @Autowired
     private IAnnonceValidator annonceValidator;
     
+    @Override
     public List<AnnonceDto> getAll()
     {
         return annonceRepository.findAll().stream().map(a -> annonceMapper.toAnnonceDto(a)).toList();
     }
     
+    @Override
     public List<AnnonceDto> getAnnonceListForCandidatOrRecruteur(UserApp userApp) throws ProblemException
     {
         if (userApp.getRole() == Role.CANDIDAT)
@@ -66,6 +68,7 @@ public class AnnonceService
     }
     
     @Transactional
+    @Override
     public String create(Annonce annonce, UserApp recruteur) throws ProblemException
     {
         annonceValidator.validerAnnonce(annonce);
@@ -75,6 +78,7 @@ public class AnnonceService
     }
     
     @Transactional
+    @Override
     public AnnonceDto addCandidatToAnnonce(Long idAnnonce, Candidature candidature, UserApp candidat) throws
           ProblemException
     {
@@ -88,6 +92,7 @@ public class AnnonceService
     }
     
     @Transactional
+    @Override
     public void deleteById(Long idAnnonce) throws ProblemException
     {
         Annonce annonce = annonceRepository.findById(idAnnonce)
@@ -97,6 +102,7 @@ public class AnnonceService
         annonceRepository.deleteById(idAnnonce);
     }
     
+    @Override
     public List<CandidatureDto> getAllCandidatsById(Long idAnnonce, HttpServletRequest request) throws Exception
     {
         
@@ -109,7 +115,7 @@ public class AnnonceService
         else
         {
             return annonce.getCandidatures().stream()
-                          .map(candidature -> candidatureMapper.toCandidatureDto(candidature)).toList();
+                          .map(candidature -> ICandidatureMapper.toCandidatureDto(candidature)).toList();
         }
     }
 }

@@ -2,7 +2,8 @@ package fr.diginamic.repotp3c.controller;
 
 import fr.diginamic.repotp3c.entity.Role;
 import fr.diginamic.repotp3c.entity.UserApp;
-import fr.diginamic.repotp3c.service.UserAppService;
+import fr.diginamic.repotp3c.exception.ProblemException;
+import fr.diginamic.repotp3c.service.IUserAppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"/auth"})
-public class AuthController
+public class AuthController implements IAuthController
 {
     @Autowired
-    private UserAppService userAppService;
+    private IUserAppService userAppService;
     
     @PostMapping({"/create-candidat"})
+    @Override
     public String createCandidat(@RequestBody UserApp candidat) throws Exception
     {
         userAppService.createUserApp(candidat, Role.CANDIDAT);
@@ -23,6 +25,7 @@ public class AuthController
     }
     
     @PostMapping({"/create-recruteur"})
+    @Override
     public String createRecruteur(@RequestBody UserApp recruteur) throws Exception
     {
         userAppService.createUserApp(recruteur, Role.RECRUTEUR);
@@ -30,6 +33,7 @@ public class AuthController
     }
     
     @PostMapping({"/create-admin"})
+    @Override
     public String createAdmin(@RequestBody UserApp admin) throws Exception
     {
         userAppService.createUserApp(admin, Role.ADMIN);
@@ -37,13 +41,15 @@ public class AuthController
     }
     
     @DeleteMapping({"/delete-admin-by-id"})
-    public String deleteAdminById(@RequestParam Long id)
+    @Override
+    public String deleteAdminById(@RequestParam Long id) throws ProblemException
     {
         userAppService.deleteUserById(id);
         return "administrateur supprimé";
     }
     
     @PostMapping({"/login"})
+    @Override
     public ResponseEntity<?> login(@RequestBody UserApp userApp) throws Exception
     {
         return ResponseEntity.ok()

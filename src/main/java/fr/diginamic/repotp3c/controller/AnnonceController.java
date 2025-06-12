@@ -6,7 +6,7 @@ import fr.diginamic.repotp3c.entity.Annonce;
 import fr.diginamic.repotp3c.entity.Candidature;
 import fr.diginamic.repotp3c.entity.UserApp;
 import fr.diginamic.repotp3c.exception.ProblemException;
-import fr.diginamic.repotp3c.service.AnnonceService;
+import fr.diginamic.repotp3c.service.IAnnonceService;
 import fr.diginamic.repotp3c.utils.HttpUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +16,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/annonce"})
-public class AnnonceController
+public class AnnonceController implements IAnnonceController
 {
     @Autowired
-    private AnnonceService annonceService;
+    private IAnnonceService annonceService;
     @Autowired
     private HttpUtils httpUtils;
     
     @GetMapping({"/get-all"})
+    @Override
     public List<AnnonceDto> getAll()
     {
         return annonceService.getAll();
     }
     
     @GetMapping({"/get-my-annonce-list"})
+    @Override
     public List<AnnonceDto> getUserAnnonceList(HttpServletRequest request) throws Exception
     {
         UserApp userApp = httpUtils.getUserApp(request);
@@ -38,6 +40,7 @@ public class AnnonceController
     }
     
     @PostMapping({"/create"})
+    @Override
     public String createAnnonce(@RequestBody Annonce annonce, HttpServletRequest request) throws Exception
     {
         UserApp recruteur = httpUtils.getUserApp(request);
@@ -46,6 +49,7 @@ public class AnnonceController
     }
     
     @PostMapping({"/candidate-by-id/{idAnnonce}"})
+    @Override
     public AnnonceDto candidateByAnnonceId(@PathVariable Long idAnnonce, @RequestBody Candidature candidature,
           HttpServletRequest request) throws Exception
     {
@@ -55,6 +59,7 @@ public class AnnonceController
     }
     
     @DeleteMapping({"/delete-by-id/{idAnnonce}"})
+    @Override
     public String deleteByAnnonceId(@PathVariable Long idAnnonce) throws ProblemException
     {
         annonceService.deleteById(idAnnonce);
@@ -62,6 +67,7 @@ public class AnnonceController
     }
     
     @GetMapping({"/get-candidature-list-by-id/{idAnnonce}"})
+    @Override
     public List<CandidatureDto> getAllCandidatureByAnnonceId(@PathVariable Long idAnnonce,
           HttpServletRequest request) throws
           Exception

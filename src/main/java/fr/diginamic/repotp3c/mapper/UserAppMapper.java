@@ -5,8 +5,9 @@ import fr.diginamic.repotp3c.entity.UserApp;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserAppMapper
+public class UserAppMapper implements IUserAppMapper
 {
+    @Override
     public UserAppDto toUserAppDto(UserApp userApp)
     {
         
