@@ -1,7 +1,7 @@
 package fr.diginamic.repotp3c.utils;
 
 import fr.diginamic.repotp3c.entity.UserApp;
-import fr.diginamic.repotp3c.service.JwtAuthentificationService;
+import fr.diginamic.repotp3c.service.IJwtAuthentificationService;
 import fr.diginamic.repotp3c.service.UserAppService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +13,22 @@ public class HttpUtils
     @Autowired
     UserAppService userAppService;
     @Autowired
-    JwtAuthentificationService jwtAuthentificationService;
+    IJwtAuthentificationService IJwtAuthentificationService;
     
     public String getUserName(HttpServletRequest request) throws Exception
     {
-        return userAppService.getUserApp(jwtAuthentificationService.getUsernameFromCookie(request))
+        return userAppService.getUserApp(IJwtAuthentificationService.getUsernameFromCookie(request))
                              .getUsername();
     }
     
     public UserApp getUserApp(HttpServletRequest request) throws Exception
     {
-        return userAppService.getUserApp(jwtAuthentificationService.getUsernameFromCookie(request));
+        return userAppService.getUserApp(IJwtAuthentificationService.getUsernameFromCookie(request));
     }
     
     public String getUserRole(HttpServletRequest request) throws Exception
     {
-        return userAppService.getUserApp(jwtAuthentificationService.getUsernameFromCookie(request))
+        return userAppService.getUserApp(IJwtAuthentificationService.getUsernameFromCookie(request))
                              .getRole().toString();
     }
 }

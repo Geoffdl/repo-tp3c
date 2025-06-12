@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 @Service
-public class JwtAuthentificationService
+public class JwtAuthentificationService implements IJwtAuthentificationService
 {
     
     @Value("${jwt.expires_in}")
@@ -32,6 +32,7 @@ public class JwtAuthentificationService
         return Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
     }
     
+    @Override
     public ResponseCookie generateToken(UserApp userApp)
     {
         System.out.println("Role: " + userApp.getRole());
@@ -45,6 +46,7 @@ public class JwtAuthentificationService
                              .build();
     }
     
+    @Override
     public String getSubject(String token)
     {
         return Jwts.parser()
@@ -55,6 +57,7 @@ public class JwtAuthentificationService
                    .getSubject();
     }
     
+    @Override
     public String getUsernameFromCookie(HttpServletRequest request) throws Exception
     {
         Cookie[] cookies = request.getCookies();
@@ -75,6 +78,7 @@ public class JwtAuthentificationService
         throw new Exception("Nothing found with cookie");
     }
     
+    @Override
     public Boolean validateToken(String token)
     {
         try

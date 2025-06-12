@@ -5,8 +5,9 @@ import fr.diginamic.repotp3c.entity.Candidature;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CandidatureMapper
+public class CandidatureMapper implements ICandidatureMapper
 {
+    @Override
     public CandidatureDto toCandidatureDto(Candidature candidature)
     {
         CandidatureDto dto = new CandidatureDto();

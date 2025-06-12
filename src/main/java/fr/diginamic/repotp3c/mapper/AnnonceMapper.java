@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class AnnonceMapper
+public class AnnonceMapper implements IAnnonceMapper
 {
     @Autowired
-    CandidatureMapper candidatureMapper;
+    ICandidatureMapper ICandidatureMapper;
     
+    @Override
     public AnnonceDto toAnnonceDto(Annonce annonce)
     {
         AnnonceDto dto = new AnnonceDto();
@@ -25,7 +26,7 @@ public class AnnonceMapper
         if (annonce.getCandidatures() != null)
         {
             List<CandidatureDto> candidatureDTOs = annonce.getCandidatures().stream()
-                                                          .map(candidature -> candidatureMapper.toCandidatureDto(
+                                                          .map(candidature -> ICandidatureMapper.toCandidatureDto(
                                                                 candidature))
                                                           .collect(Collectors.toList());
             dto.setCandidatures(candidatureDTOs);
